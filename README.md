@@ -20,4 +20,7 @@ on MacOs:
 - then run codegen with command => `cross-env IP=nameofyourchoice npm run codegen`
 
 on Windows:
-????
+ - Open with notepad(admin mode) file "host" here => C:\Windows\System32\drivers\etc
+ - then add your ip adress=> `192.168.1.17 nameofyourchoice`
+ - then run codegen with command => `cross-env IP=nameofyourchoice npm run codegen`
+
