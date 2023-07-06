@@ -7,14 +7,24 @@ function Login() {
   const { setUserData } = useAuth();
 
   const [login, { error, loading }] = useLoginLazyQuery({
-    onCompleted(data) {
-      setUserData(data.login);
+    async onCompleted(data) {
+      console.log("data", data);
+      console.log("data.login", data.login);
+      await setUserData(data.login);
+      //   navigate("/");
+    },
+    onError(err) {
+      console.log("error", err);
     },
   });
-  const [state, setState] = useState({ email: "", password: "" });
+  const [state, setState] = useState({
+    email: "test@test.fr",
+    password: "test",
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
     if (state.email && state.password) {
+      console.log(state);
       login({
         variables: {
           infos: {
@@ -23,6 +33,7 @@ function Login() {
         },
       });
     }
+    console.log("hello");
   };
 
   return (

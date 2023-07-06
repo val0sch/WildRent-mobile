@@ -8,19 +8,22 @@ import {
 } from "@apollo/client";
 import { URISERVER } from "@env";
 import Login from "./components/Login";
-
+import AuthContextProvider from "./contexts/AuthContext";
 export default function App() {
   const client = new ApolloClient({
     uri: URISERVER,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({ addTypename: false }),
   });
+  console.log("URISERVER", URISERVER);
 
   return (
     <ApolloProvider client={client}>
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-        <Login />
-      </SafeAreaView>
+      <AuthContextProvider>
+        <SafeAreaView style={styles.container}>
+          <StatusBar style="auto" />
+          <Login />
+        </SafeAreaView>
+      </AuthContextProvider>
     </ApolloProvider>
   );
 }

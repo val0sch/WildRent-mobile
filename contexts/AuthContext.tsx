@@ -1,4 +1,5 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
+import * as SecureStore from "expo-secure-store";
 
 export const AuthContext = createContext({
   async setUserData(data: any) {},
@@ -8,10 +9,12 @@ export const AuthContext = createContext({
   },
 });
 
-export default function AuthContextProvider({
+function ComponentWithInitialStateProvider({
   children,
+  userData,
 }: {
   children: JSX.Element;
+  userData: any;
 }) {
   const [state, dispatch] = useReducer(
     (prevState: any, action: any) => {
@@ -29,20 +32,22 @@ export default function AuthContextProvider({
       }
     },
     {
-      userData: JSON.parse(`${localStorage.getItem("userData")}`) || {},
+      userData,
     }
   );
 
+  useEffect(() => {
+  }, [state]);
   const authContext = {
     setUserData: async (data: any) => {
       const { token, ...userData } = data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("userData", JSON.stringify(userData));
+      await SecureStore.setItemAsync("token", token);
+      await SecureStore.setItemAsync("userData", JSON.stringify(userData));
       dispatch({ type: "LOG_IN", userData });
     },
-    logout: () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userData");
+    logout: async () => {
+      await SecureStore.deleteItemAsync("token");
+      await SecureStore.deleteItemAsync("userData");
       dispatch({ type: "LOG_OUT" });
     },
     userInfos: {
@@ -54,3 +59,25 @@ export default function AuthContextProvider({
     <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
   );
 }
+
+const AuthContextProvider = ({ children }: { children: JSX.Element }) => {
+  const [data, setData] = useState<null | {}>(null);
+  const getUserData = async () => {
+    let result = await SecureStore.getItemAsync("userData");
+    if (result) {
+      setData(JSON.parse(result));
+    }
+  };
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  if (!data) return null;
+  return (
+    <ComponentWithInitialStateProvider userData={data}>
+      {children}
+    </ComponentWithInitialStateProvider>
+  );
+};
+
+export default AuthContextProvider;
