@@ -1,43 +1,27 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   gql,
 } from "@apollo/client";
-import Constants from "expo-constants";
-const { manifest } = Constants;
+import { URISERVER } from "@env";
+import Login from "./components/Login";
 
 export default function App() {
-  const uri =
-    typeof manifest.packagerOpts === `object` && manifest.packagerOpts.dev
-      ? manifest.debuggerHost.split(`:`).shift().concat(`:4000/graphql`)
-      : `api.example.com`;
-  console.log(uri);
   const client = new ApolloClient({
-    uri: `http://${uri}`,
+    uri: URISERVER,
     cache: new InMemoryCache(),
   });
 
-  client
-    .query({
-      query: gql`
-        query User {
-          users {
-            email
-            isAdmin
-          }
-        }
-      `,
-    })
-    .then((result) => console.log(result.data.users.map((user) => user.email)));
-
   return (
-    <View style={styles.container}>
-      <Text>Hello !</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ApolloProvider client={client}>
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="auto" />
+        <Login />
+      </SafeAreaView>
+    </ApolloProvider>
   );
 }
 

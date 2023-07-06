@@ -1,0 +1,11 @@
+overwrite: true
+schema: "http://${IP}:4000/graphql"
+# schema: "http://192.168.1.17:4000/graphql"
+documents: ["./graphql/*.query.ts", "./graphql/*.mutation.ts"]
+generates:
+  ./generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-resolvers"
+      - "typescript-react-apollo"
