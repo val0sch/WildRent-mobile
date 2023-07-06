@@ -8,7 +8,7 @@ import AuthContextProvider from "./contexts/AuthContext";
 import { CHECK_TOKEN } from "./graphql/auth.query";
 import Home from "./components/Home";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import useAuth from "./hooks/useAuth";
 import Compte from "./components/Compte";
@@ -22,7 +22,7 @@ export default function App() {
     cache: new InMemoryCache({ addTypename: false }),
   });
 
-  const Stack = createStackNavigator();
+  const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   return (
     <NavigationContainer>
@@ -38,8 +38,8 @@ export default function App() {
                 options={{ title: "Connexion" }}
               />
             </Stack.Navigator>
-              {/* Si on est connecté :  */}
-              {/* <Tab.Navigator
+            {/* Si on est connecté :  */}
+            {/* <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
