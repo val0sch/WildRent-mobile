@@ -37,6 +37,7 @@ export default function App() {
                 component={Login}
                 options={{ title: "Connexion" }}
               />
+            </Stack.Navigator>
               {/* Si on est connecté :  */}
               {/* <Tab.Navigator
               screenOptions={({ route }) => ({
@@ -74,7 +75,6 @@ export default function App() {
                 options={{ title: "Mes informations" }}
               />
             </Tab.Navigator> */}
-            </Stack.Navigator>
           </SafeAreaView>
         </AuthContextProvider>
       </ApolloProvider>
