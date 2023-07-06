@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput, Button } from "react-native";
 import useAuth from "../hooks/useAuth";
 import { useLoginLazyQuery } from "../generated";
 
-function Login() {
+function Login({ navigation }) {
   const { setUserData } = useAuth();
 
   const [login, { error, loading }] = useLoginLazyQuery({
@@ -11,7 +11,7 @@ function Login() {
       console.log("data", data);
       console.log("data.login", data.login);
       await setUserData(data.login);
-      //   navigate("/");
+      navigation.navigate("Accueil");
     },
     onError(err) {
       console.log("error", err);
