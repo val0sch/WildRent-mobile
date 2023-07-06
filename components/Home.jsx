@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-function Accueil() {
+function Home() {
   return (
     <View style={styles.container}>
-      <Text>Accueil</Text>
+      <Text>Home</Text>
     </View>
   );
 }
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-export default Accueil;
+export default Home;

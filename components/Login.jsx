@@ -5,13 +5,13 @@ import { useLoginLazyQuery } from "../generated";
 
 function Login({ navigation }) {
   const { setUserData } = useAuth();
-
+  console.log(navigation);
   const [login, { error, loading }] = useLoginLazyQuery({
     async onCompleted(data) {
       console.log("data", data);
       console.log("data.login", data.login);
       await setUserData(data.login);
-      navigation.navigate("Accueil");
+      navigation.navigate("Home");
     },
     onError(err) {
       console.log("error", err);
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
   },
   input: {
