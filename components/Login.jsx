@@ -8,7 +8,7 @@ function Login() {
 
   const [login, { error, loading }] = useLoginLazyQuery({
     async onCompleted(data) {
-      console.warn("data", data);
+      console.log("data", data);
       await setUserData(data.login);
     },
     onError(err) {
@@ -43,6 +43,7 @@ function Login() {
         value={state.email}
       ></TextInput>
       <TextInput
+        secureTextEntry={true}
         style={styles.input}
         placeholder="renseignez votre mot de passe"
         onChange={(event) =>

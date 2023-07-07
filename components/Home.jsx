@@ -19,6 +19,7 @@ function Home() {
 
   return Object.keys(userInfos).length > 0 ? (
     <Tab.Navigator
+      initialRouteName="Compte"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -36,7 +37,6 @@ function Home() {
         },
         tabBarActiveTintColor: "blue",
         tabBarInactiveTintColor: "gray",
-        initialRouteName: "Compte"
       })}
     >
       <Tab.Screen
