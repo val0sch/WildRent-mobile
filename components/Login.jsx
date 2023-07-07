@@ -3,28 +3,25 @@ import { View, StyleSheet, TextInput, Button } from "react-native";
 import useAuth from "../hooks/useAuth";
 import { useLoginLazyQuery } from "../generated";
 
-function Login({ navigation }) {
+function Login() {
   const { setUserData } = useAuth();
-  console.log(navigation);
+
   const [login, { error, loading }] = useLoginLazyQuery({
     async onCompleted(data) {
-      console.log("data", data);
-      console.log("data.login", data.login);
+      console.warn("data", data);
       await setUserData(data.login);
-      // navigation.navigate("Home");
     },
     onError(err) {
-      console.log("error", err);
+      console.error("error", err);
     },
   });
   const [state, setState] = useState({
-    email: "test@test.fr",
-    password: "test",
+    email: "",
+    password: "",
   });
   const handleSubmit = (e) => {
     e.preventDefault();
     if (state.email && state.password) {
-      console.log(state);
       login({
         variables: {
           infos: {
@@ -33,7 +30,6 @@ function Login({ navigation }) {
         },
       });
     }
-    console.log("hello");
   };
 
   return (

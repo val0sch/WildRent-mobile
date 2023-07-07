@@ -53,7 +53,6 @@ function ComponentWithInitialStateProvider({
       ...state.userData,
     },
   };
-  console.log("CHILDREN", children);
   return (
     <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
   );
