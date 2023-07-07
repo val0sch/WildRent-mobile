@@ -36,8 +36,7 @@ function ComponentWithInitialStateProvider({
     }
   );
 
-  useEffect(() => {
-  }, [state]);
+  useEffect(() => {}, [state]);
   const authContext = {
     setUserData: async (data: any) => {
       const { token, ...userData } = data;
@@ -54,7 +53,7 @@ function ComponentWithInitialStateProvider({
       ...state.userData,
     },
   };
-
+  console.log("CHILDREN", children);
   return (
     <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
   );
@@ -66,6 +65,8 @@ const AuthContextProvider = ({ children }: { children: JSX.Element }) => {
     let result = await SecureStore.getItemAsync("userData");
     if (result) {
       setData(JSON.parse(result));
+    } else {
+      setData({});
     }
   };
   useEffect(() => {

@@ -28,54 +28,62 @@ export default function App() {
     <NavigationContainer>
       <ApolloProvider client={client}>
         <AuthContextProvider>
-          <SafeAreaView style={styles.container}>
-            <StatusBar style="auto" />
+          <View style={styles.container}>
+            
+            <Login />
+            {/* <Text>Hello</Text> */}
+            {/* <StatusBar style="auto" /> */}
             {/*  Si on n'est pas connecté */}
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ title: "Connexion" }}
-              />
-            </Stack.Navigator>
+
+            {!Object.keys(userInfos).length > 0 ? (
+            {/* <Stack.Navigator>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ title: "Connexion" }}
+            />
+          </Stack.Navigator> */}
+
+          ) : (
             {/* Si on est connecté :  */}
             {/* <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-                  if (route.name === "Rentals") {
-                    iconName = focused ? "basket" : "basket-outline";
-                  } else if (route.name === "Contact") {
-                    iconName = focused
-                      ? "chatbox-ellipses"
-                      : "chatbox-ellipses-outline";
-                  } else if (route.name === "Compte") {
-                    iconName = focused ? "person" : "person-outline";
-                  }
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
-                tabBarActiveTintColor: "blue",
-                tabBarInactiveTintColor: "gray",
-              })}
-            >
-              <Tab.Screen
-                name="Rentals"
-                component={Rentals}
-                options={{ title: "Réservations" }}
-              />
-              <Tab.Screen
-                name="Contact"
-                component={Contact}
-                options={{ title: "Prendre contact" }}
-              />
-              <Tab.Screen
-                name="Compte"
-                component={Compte}
-                options={{ title: "Mes informations" }}
-              />
-            </Tab.Navigator> */}
-          </SafeAreaView>
+                if (route.name === "Rentals") {
+                  iconName = focused ? "basket" : "basket-outline";
+                } else if (route.name === "Contact") {
+                  iconName = focused
+                    ? "chatbox-ellipses"
+                    : "chatbox-ellipses-outline";
+                } else if (route.name === "Compte") {
+                  iconName = focused ? "person" : "person-outline";
+                }
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: "blue",
+              tabBarInactiveTintColor: "gray",
+            })}
+          >
+            <Tab.Screen
+              name="Rentals"
+              component={Rentals}
+              options={{ title: "Réservations" }}
+            />
+            <Tab.Screen
+              name="Contact"
+              component={Contact}
+              options={{ title: "Prendre contact" }}
+            />
+            <Tab.Screen
+              name="Compte"
+              component={Compte}
+              options={{ title: "Mes informations" }}
+            />
+          </Tab.Navigator> */}
+          ) }
+          </View>
         </AuthContextProvider>
       </ApolloProvider>
     </NavigationContainer>

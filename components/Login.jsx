@@ -11,7 +11,7 @@ function Login({ navigation }) {
       console.log("data", data);
       console.log("data.login", data.login);
       await setUserData(data.login);
-      navigation.navigate("Home");
+      // navigation.navigate("Home");
     },
     onError(err) {
       console.log("error", err);
