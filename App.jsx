@@ -6,8 +6,9 @@ import Home from "./components/Home";
 import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
+  const uri = process.env.EXPO_PUBLIC_URISERVER;
   const client = new ApolloClient({
-    uri: process.env.EXPO_PUBLIC_URISERVER,
+    uri: uri,
     cache: new InMemoryCache({ addTypename: false }),
   });
   
