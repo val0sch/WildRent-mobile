@@ -4,7 +4,6 @@ import { View, Text, TextInput, TouchableOpacity,
 import * as MailComposer from 'expo-mail-composer';
 
 const ContactForm = () => {
-  const [lastName, setLastName] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -26,7 +25,7 @@ const ContactForm = () => {
   }
     
     
-    //setIsSubmitted(true); 
+    setIsSubmitted(true); 
   };
 
   if (isSubmitted) {
@@ -45,13 +44,6 @@ const ContactForm = () => {
 };
   return (
         <View style={styles.container}>
-            <TextInput
-              style={styles.input}
-              placeholder="Nom"
-              value={lastName}
-              onChangeText={text => setLastName(text)}
-              returnKeyType={ "done" }
-            />
             <TextInput
                 style={styles.input}
                 placeholder="Objet du mail"
