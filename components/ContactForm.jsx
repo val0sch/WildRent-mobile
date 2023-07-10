@@ -9,8 +9,7 @@ const ContactForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = () => {
-    if ( lastName.trim() === '' || subject.trim() === '' || message.trim() === '') {
-      // Vérifie si tous les champs sont remplis
+    if ( subject.trim() === '' || message.trim() === '') {
       Alert.alert('Veuillez remplir tous les champs');
       return;
     } 
