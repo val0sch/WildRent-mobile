@@ -14,10 +14,17 @@ const ChatBox = () => {
   };
 
   useEffect(() => {
+    console.log("TEST", socket)
     socket.on("receive_message", (data) => {
       setMessageReceived(data.message);
     });
-    console.log("socket", socket);
+    socket.on("connect", () => {
+      console.log("CONNECTE" , socket);
+    });
+    socket.on('connect_error', err => console.log(err.message))
+    socket.on('connect_failed', err => console.log("err2", err))
+    
+    // console.log("socket", socket);
   }, []);
 
   console.log(messageReceived);
