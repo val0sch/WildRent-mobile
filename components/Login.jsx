@@ -16,8 +16,8 @@ function Login() {
     },
   });
   const [state, setState] = useState({
-    email: "",
-    password: "",
+    email: "testuser@test.fr",
+    password: "Test2023",
   });
   const handleSubmit = (e) => {
     e.preventDefault();

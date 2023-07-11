@@ -1,46 +1,54 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import React, { useEffect, useState } from "react";
-// import SocketIOClient from "socket.io-client";
 import socket from "../../service/socketService";
+import useAuth from "../../hooks/useAuth";
 
 const ChatBox = () => {
-  // const socket = SocketIOClient("http://localhost:3001");
-
-  const [message, onChangeTextMessage] = React.useState("");
-  const [messageReceived, setMessageReceived] = React.useState("");
-
-  const sendMessage = () => {
-    // socket.emit("send_message", { message });
+  const { userInfos } = useAuth();
+  const [input, onChangeInput] = useState("");
+  const [conversation, setConversation] = useState([]);
+  const [messageReceived, setMessageReceived] = useState([]);
+  
+  const sendMessage = async () => {
+    if (input !== "") {
+      const messageData = {
+        room: userInfos.email,
+        author: userInfos.email,
+        message: input,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+      };
+      await socket.emit("send_message", messageData);
+    }
+    // setConversation([...conversation, input]);
+    // console.log("conversation", { conversation });
+    // socket.emit("send_message", { conversation });
+    onChangeInput("");
   };
+  // useEffect(() => {
+  //   socket.on("receive_message", (data) => {
+  //     // setMessageReceived((prev) => [...prev, data]);
+  //     console.log(data);
+  //   });
+  // }, []);
+  console.log(input);
+  console.log(conversation);
 
-  useEffect(() => {
-    console.log("TEST", socket)
-    socket.on("receive_message", (data) => {
-      setMessageReceived(data.message);
-    });
-    socket.on("connect", () => {
-      console.log("CONNECTE" , socket);
-    });
-    socket.on('connect_error', err => console.log(err.message))
-    socket.on('connect_failed', err => console.log("err2", err))
-    
-    // console.log("socket", socket);
-  }, []);
-
-  console.log(messageReceived);
   return (
     <View style={styles.container}>
       <View styles={styles.messageBox}>
-        <Text>{messageReceived}</Text>
+        <Text>hello</Text>
       </View>
       <View style={styles.writingBox}>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeTextMessage}
-          value={message}
+          onChangeText={onChangeInput}
+          value={input}
           placeholder="Votre message..."
         ></TextInput>
-        <Button style={styles.button} onPress={sendMessage} title="IconSend" />
+        <Button style={styles.button} onPress={sendMessage} title="Envoyer" />
       </View>
     </View>
   );
