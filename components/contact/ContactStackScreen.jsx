@@ -1,11 +1,11 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ContactForm from "./ContactForm";
+import Form from "./Form";
 import ChatBoxScreen from "./ChatBoxScreen";
 import ContactScreen from "./ContactScreen";
 
-const ContactStackScreen = ({ navigation }) => {
+const ContactStackScreen = () => {
   const ContactStack = createNativeStackNavigator();
   return (
     <ContactStack.Navigator>
@@ -15,8 +15,8 @@ const ContactStackScreen = ({ navigation }) => {
         options={{ headerShown: false }}
       />
       <ContactStack.Screen
-        name="ContactForm"
-        component={ContactForm}
+        name="Form"
+        component={Form}
         options={{ title: "Formulaire de contact" }}
       />
       <ContactStack.Screen

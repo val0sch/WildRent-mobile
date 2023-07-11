@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const ContactForm = () => {
+const Form = () => {
   return (
     <View>
       <Text>Email</Text>
@@ -9,4 +9,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default Form;

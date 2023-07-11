@@ -6,7 +6,7 @@ const ContactScreen = ({ navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("ContactForm")}
+        onPress={() => navigation.navigate("Form")}
       >
         <Text style={styles.text}>Envoyer un mail</Text>
       </TouchableOpacity>
@@ -23,19 +23,29 @@ const ContactScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
     backgroundColor: "#fff",
-    justifyContent: "space-around",
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
+    justifyContent: "center",
+    gap: 100,
   },
   button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    width: 300,
+    //turquoise
+    backgroundColor: "#50a5b1",
+    // blue navy
+    // backgroundColor: "#1a265a",
+    // orange
+    // backgroundColor: "#f1600d",
+    borderRadius: 10,
+    paddingVertical: 20,
+    alignContent: "center",
+  },
+  text: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "center",
   },
 });
 
