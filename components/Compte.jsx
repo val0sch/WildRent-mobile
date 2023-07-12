@@ -16,8 +16,14 @@ const Compte = () => {
   if (!fontsLoaded) {
     return null;
   }
-
   const { userInfos, logout } = useAuth();
+
+  const [birthday, setBirthday] = useState(data?.detailsConnectUser?.birthday?.substr(0,10));
+  const [showDatePicker, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [address, setAddress] = useState(data?.detailsConnectUser.address);
+  const [firstname, setFirstname] = useState(data?.detailsConnectUser.firstname);
+  const [lastname, setLastname] = useState(data?.detailsConnectUser.lastname);
 
   const { data,loading } = useQuery(GET_USERDETAILS, {
     onCompleted(data) {
@@ -34,13 +40,6 @@ const Compte = () => {
       "no-cache"
     ,
   });
-
-  const [birthday, setBirthday] = useState(data?.detailsConnectUser?.birthday?.substr(0,10));
-  const [showDatePicker, setShow] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [address, setAddress] = useState(data?.detailsConnectUser.address);
-  const [firstname, setFirstname] = useState(data?.detailsConnectUser.firstname);
-  const [lastname, setLastname] = useState(data?.detailsConnectUser.lastname);
 
   const [updateUserDetails] = useMutation(UPDATE_USERDETAILS, {
     onCompleted(dataUserDetails) {
