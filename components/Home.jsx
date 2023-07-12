@@ -9,8 +9,6 @@ import Rentals from "./Rentals";
 import Contact from "./contact/ContactStackScreen";
 import Compte from "./Compte";
 
-import ContactForm from "./ContactForm";
-
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 function Home() {
@@ -35,9 +33,6 @@ function Home() {
           } else if (route.name === "Compte") {
             iconName = focused ? "person" : "person-outline";
           }
-          else if (route.name === "ContactForm") {
-            iconName = focused ? "person" : "person-outline";
-          }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "blue",
@@ -58,11 +53,6 @@ function Home() {
         name="Contact"
         component={Contact}
         options={{ title: "Prendre contact" }}
-      />
-      <Tab.Screen
-        name="ContactForm"
-        component={ContactForm}
-        options={{ title: "ContactForm" }}
       />
     </Tab.Navigator>
   ) : (

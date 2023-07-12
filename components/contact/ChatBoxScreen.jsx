@@ -1,15 +1,23 @@
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  Item,
+} from "react-native";
 import React, { useEffect, useState } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import socket from "../../service/socketService";
 import useAuth from "../../hooks/useAuth";
+import MessageComponent from "./MessageComponent";
 
 const ChatBox = () => {
   const { userInfos } = useAuth();
   const [input, onChangeInput] = useState("");
-  const [conversation, setConversation] = useState([]);
   const [messageReceived, setMessageReceived] = useState([]);
-  
-  const sendMessage = async () => {
+  console.log(socket.id);
+  const sendMessage = () => {
     if (input !== "") {
       const messageData = {
         room: userInfos.email,
@@ -20,35 +28,39 @@ const ChatBox = () => {
           ":" +
           new Date(Date.now()).getMinutes(),
       };
-      await socket.emit("send_message", messageData);
+      socket.emit("send_message", messageData);
+      setMessageReceived((prev) => [...prev, messageData]);
     }
-    // setConversation([...conversation, input]);
-    // console.log("conversation", { conversation });
-    // socket.emit("send_message", { conversation });
     onChangeInput("");
   };
-  // useEffect(() => {
-  //   socket.on("receive_message", (data) => {
-  //     // setMessageReceived((prev) => [...prev, data]);
-  //     console.log(data);
-  //   });
-  // }, []);
-  console.log(input);
-  console.log(conversation);
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessageReceived((prev) => [...prev, data]);
+    });
+  }, [socket]);
 
   return (
     <View style={styles.container}>
-      <View styles={styles.messageBox}>
-        <Text>hello</Text>
+      <View style={styles.messageBox}>
+        {messageReceived && (
+          <FlatList
+            data={messageReceived}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => <MessageComponent message={item} />}
+          />
+        )}
       </View>
+
       <View style={styles.writingBox}>
         <TextInput
           style={styles.input}
           onChangeText={onChangeInput}
           value={input}
           placeholder="Votre message..."
-        ></TextInput>
-        <Button style={styles.button} onPress={sendMessage} title="Envoyer" />
+        />
+        <Pressable style={styles.button} onPress={sendMessage}>
+          <Ionicons name={"send-outline"} size={25} color="black" />
+        </Pressable>
       </View>
     </View>
   );
@@ -57,24 +69,41 @@ const ChatBox = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    gap: 100,
+    backgroundColor: "#F5F5F5",
+    paddingVertical: 20,
   },
   messageBox: {
     flex: 1,
-    alignItems: "center",
-    backgroundColor: "red",
-    justifyContent: "center",
-    gap: 100,
+    // backgroundColor: "red",
+    padding: 10,
+    alignItems: "flex-end",
+    //not working
+    // justifyContent: "center",
   },
   writingBox: {
-    flex: 1,
-    alignItems: "center",
     backgroundColor: "#fff",
-    justifyContent: "center",
-    gap: 100,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 5,
+    borderRadius: 10,
+    paddingLeft: 10,
+  },
+  input: {
+    flex: 1,
+  },
+  item: {
+    backgroundColor: "#f9c2ff",
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  button: {
+    backgroundColor: "#f1600d",
+    paddingStart: 15,
+    paddingEnd: 12,
+    paddingVertical: 5,
+    borderRadius: 10,
   },
 });
 

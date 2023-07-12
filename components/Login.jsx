@@ -8,7 +8,7 @@ function Login() {
 
   const [login, { error, loading }] = useLoginLazyQuery({
     async onCompleted(data) {
-      console.log("data", data);
+      // console.log("data", data);
       await setUserData(data.login);
     },
     onError(err) {
