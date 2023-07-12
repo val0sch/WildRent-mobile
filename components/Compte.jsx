@@ -1,14 +1,22 @@
 import { StyleSheet, View, Text, TextInput, 
   TouchableOpacity, Pressable, Platform } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USERDETAILS } from "../graphql/userDetails.mutation";
 import {GET_USERDETAILS} from "../graphql/detailsUserConnect.query"
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { useFonts } from 'expo-font';
 
 const Compte = () => {
+  const [fontsLoaded] = useFonts({
+    'Poppins': require("../assets/Poppins-Regular.ttf")
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const { userInfos, logout } = useAuth();
 
   const { data,loading } = useQuery(GET_USERDETAILS, {
@@ -97,7 +105,7 @@ const Compte = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Information sur les détails de l'utilisateur</Text>
+      <Text style={styles.title}>Détails</Text>
   
         <Text style={styles.label}>Adresse:</Text>
         <TextInput
@@ -123,7 +131,7 @@ const Compte = () => {
         <Text style={styles.label}>Date de naissance:</Text>
         {!showDatePicker && (<Pressable onPress={toggleDatePicker}>
           <TextInput
-            style={styles.input}
+            style={styles.inputBirthday}
             value={birthday}
             onChangeText={(text) => setBirthday(text)}
             editable={false}
@@ -141,15 +149,16 @@ const Compte = () => {
 
         {showDatePicker && Platform.OS === "ios" &&(
           <View style={{flexDirection: "row",
-            justifyContent: "space-around"}}>
+            justifyContent: "space-around", alignSelf: "center"}}>
 
-            <TouchableOpacity style={styles.button} onPress={confirmIOSDate}>
+            <TouchableOpacity style={styles.buttonSecondary} onPress={toggleDatePicker}>
+              <Text style={styles.secondary}>Annuler</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.buttonCalendar} onPress={confirmIOSDate}>
               <Text style={styles.buttonText}>Valider</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={toggleDatePicker}>
-              <Text style={styles.buttonText}>Annuler</Text>
-            </TouchableOpacity>
           </View>
         )}
   
@@ -157,8 +166,8 @@ const Compte = () => {
         <Text style={styles.buttonText}>Mettre à jour</Text>
       </TouchableOpacity>
   
-      <TouchableOpacity style={styles.button} onPress={logout}>
-        <Text style={styles.buttonText}>Déconnexion</Text>
+      <TouchableOpacity style={styles.buttonLogout} onPress={logout}>
+        <Text style={styles.logout}>Déconnexion</Text>
       </TouchableOpacity>
     </View>
   );
@@ -167,41 +176,93 @@ const Compte = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red", 
+    backgroundColor: "whitesmoke", 
     justifyContent: "center",
-    alignItems: "center",
-    padding: 5,
+    alignItems: "left",
+    padding: 10,
   },
   title: {
+    fontFamily:'Poppins',
+    alignSelf:'center',
     textAlign: 'center',
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
   },
   label: {
-    width: "30%",
-    fontWeight: "bold",
+    marginTop: 15,
+    paddingLeft: 10,
+    paddingBottom: 10,
+    fontFamily:'Poppins',
+    fontSize:"",
   },
   input: {
     flex: 0.2,
-    backgroundColor: "blue", 
+    backgroundColor: "white", 
     borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 10,
-    padding: 10,
+    borderColor: "#f1600d",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 0,
+    width: "100%"
   },
-  button: {
-    backgroundColor: "#FFA500",
-    borderRadius: 10,
+  inputBirthday: {
+    flex: 0.2,
+    backgroundColor: "white", 
+    borderWidth: 1,
+    borderColor: "#f1600d",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    alignSelf: "center"
+  },
+  buttonCalendar: {
+    backgroundColor: "#f1600d",
+    borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 30,
     marginBottom: 10,
+  },
+  button: {
+    alignSelf:'center',
+    backgroundColor: "#f1600d",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
   },
   buttonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
+  },
+  buttonSecondary: {
+    marginRight: 5,
+    marginBottom: 10,
+    alignSelf:'center',
+    borderRadius: 8,
+    borderColor: "#f1600d",
+    backgroundColor: "white",
+    fontSize: 16,
+    borderWidth: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+  },
+  secondary: {
+    color: "#f1600d",
+  },
+  buttonLogout: {
+    marginTop: 10,
+    alignSelf:'center',
+    borderRadius: 8,
+    borderColor: "#f1600d",
+    backgroundColor: "white",
+    fontSize: 16,
+    borderWidth: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+  },
+  logout: {
+    color: "#f1600d",
   },
   datePicker:{
     height: 120,
