@@ -68,10 +68,6 @@ const Compte = () => {
   };
 
   const handleUpdateDetails = () => {
-    // const updatedBirthday = birthday === "" ? data?.detailsConnectUser.birthday : birthday; 
-    // const updatedAddress = address === "" ? data?.detailsConnectUser.updateDetailsUser.address : address; 
-    // const updatedFirstname = firstname === "" ? data?.detailsConnectUser.updateDetailsUser.firstname : firstname; 
-    // const updatedLastname = lastname === "" ? data?.detailsConnectUser.updateDetailsUser.lastname : lastname; 
     updateUserDetails({
       variables: {
         updateDetailsUserId: data?.detailsConnectUser.id,
@@ -181,6 +177,7 @@ const styles = StyleSheet.create({
   label: {
     width: "30%",
     fontWeight: "bold",
+    width: "100%"
   },
   input: {
     flex: 0.2,
@@ -189,6 +186,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderRadius: 10,
     padding: 10,
+    width: "100%",
   },
   button: {
     backgroundColor: "#FFA500",
