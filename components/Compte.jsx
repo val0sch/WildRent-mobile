@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, TextInput, 
   TouchableOpacity, Pressable, Platform } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USERDETAILS } from "../graphql/userDetails.mutation";
@@ -14,13 +14,20 @@ const Compte = () => {
   const { data,loading } = useQuery(GET_USERDETAILS, {
     onCompleted(data) {
       console.log("Details du user", data);
+      setAddress(data?.detailsConnectUser.address)
+      setFirstname(data?.detailsConnectUser.firstname)
+      setLastname(data?.detailsConnectUser.lastname)
+      setBirthday(data?.detailsConnectUser?.birthday?.substr(0,10))
     },
     onError(error) {
       console.error(error);
     },
+    fetchPolicy:
+      "no-cache"
+    ,
   });
 
-  const [birthday, setBirthday] = useState(data?.detailsConnectUser.birthday.substr(0,10));
+  const [birthday, setBirthday] = useState(data?.detailsConnectUser?.birthday?.substr(0,10));
   const [showDatePicker, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [address, setAddress] = useState(data?.detailsConnectUser.address);
@@ -61,18 +68,18 @@ const Compte = () => {
   };
 
   const handleUpdateDetails = () => {
-    const updatedBirthday = birthday === "" ? data?.detailsConnectUser.birthday : birthday; 
-    const updatedAddress = address === "" ? data?.detailsConnectUser.updateDetailsUser.address : address; 
-    const updatedFirstname = firstname === "" ? data?.detailsConnectUser.updateDetailsUser.firstname : firstname; 
-    const updatedLastname = lastname === "" ? data?.detailsConnectUser.updateDetailsUser.lastname : lastname; 
+    // const updatedBirthday = birthday === "" ? data?.detailsConnectUser.birthday : birthday; 
+    // const updatedAddress = address === "" ? data?.detailsConnectUser.updateDetailsUser.address : address; 
+    // const updatedFirstname = firstname === "" ? data?.detailsConnectUser.updateDetailsUser.firstname : firstname; 
+    // const updatedLastname = lastname === "" ? data?.detailsConnectUser.updateDetailsUser.lastname : lastname; 
     updateUserDetails({
       variables: {
         updateDetailsUserId: data?.detailsConnectUser.id,
         infos: {
-          birthday: updatedBirthday,
-          address: updatedAddress,
-          firstname: updatedFirstname,
-          lastname: updatedLastname,
+          birthday: birthday,
+          address: address,
+          firstname: firstname,
+          lastname: lastname,
         },
       },
     })
