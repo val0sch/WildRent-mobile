@@ -163,10 +163,9 @@ const Compte = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red", 
     justifyContent: "center",
     alignItems: "center",
-    padding: 5,
+    padding: 15,
   },
   title: {
     textAlign: 'center',
@@ -181,7 +180,6 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 0.2,
-    backgroundColor: "blue", 
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 10,
