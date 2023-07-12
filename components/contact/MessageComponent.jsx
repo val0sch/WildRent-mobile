@@ -2,33 +2,50 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function MessageComponent({ message }) {
+export default function MessageComponent({ message, userInfos }) {
+  console.log(userInfos.email, message.email);
   return (
-    <View style={styles.container}>
+    <View
+      style={userInfos.email === message.author ? styles.you : styles.other}
+    >
       <Text style={styles.author}>
         <Ionicons name={"person-outline"} size={15} color="grey" />{" "}
-        {message.author}
+        {userInfos.email === message.author ? "you" : message.author}
       </Text>
-      <Text>{message.message}</Text>
+      <Text style={styles.message}>{message.message}</Text>
       <Text style={styles.time}>{message.time}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  other: {
+    backgroundColor: "#50a5b1",
     margin: 15,
     gap: 3,
-    alignItems: "flex-start",
+    alignSelf: "flex-start",
+    borderRadius: 8,
+    padding: 8,
+    width: 200,
   },
-
-  author: {
-    fontSize: 10,
-    color: "grey",
+  you: {
+    backgroundColor: "#1a265a",
+    color: "white",
+    margin: 15,
+    gap: 3,
+    alignSelf: "flex-end",
+    borderRadius: 8,
+    padding: 10,
+    width: 200,
+  },
+  author: { color: "white", fontSize: 10, alignSelf: "flex-start" },
+  message: {
+    color: "white",
+    fontSize: 20,
   },
   time: {
-    fontSize: 10,
-    color: "grey",
+    fontSize: 8,
     alignSelf: "flex-end",
+    color: "white",
   },
 });

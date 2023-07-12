@@ -1,11 +1,4 @@
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  Item,
-} from "react-native";
+import { View, TextInput, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import socket from "../../service/socketService";
@@ -46,7 +39,9 @@ const ChatBox = () => {
           <FlatList
             data={messageReceived}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <MessageComponent message={item} />}
+            renderItem={({ item }) => (
+              <MessageComponent message={item} userInfos={userInfos} />
+            )}
           />
         )}
       </View>
@@ -59,7 +54,7 @@ const ChatBox = () => {
           placeholder="Votre message..."
         />
         <Pressable style={styles.button} onPress={sendMessage}>
-          <Ionicons name={"send-outline"} size={25} color="black" />
+          <Ionicons name={"send-outline"} size={25} color="white" />
         </Pressable>
       </View>
     </View>
@@ -76,7 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: "red",
     padding: 10,
-    alignItems: "flex-end",
     //not working
     // justifyContent: "center",
   },

@@ -1,11 +1,10 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Form from "./Form";
 import ChatBoxScreen from "./ChatBoxScreen";
 import ContactScreen from "./ContactScreen";
 
-const ContactStackScreen = () => {
+const ContactStack = () => {
   const ContactStack = createNativeStackNavigator();
   return (
     <ContactStack.Navigator>
@@ -30,4 +29,4 @@ const ContactStackScreen = () => {
 {
 }
 
-export default ContactStackScreen;
+export default ContactStack;
