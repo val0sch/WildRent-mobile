@@ -76,10 +76,6 @@ const Compte = () => {
   };
 
   const handleUpdateDetails = () => {
-    // const updatedBirthday = birthday === "" ? data?.detailsConnectUser.birthday : birthday; 
-    // const updatedAddress = address === "" ? data?.detailsConnectUser.updateDetailsUser.address : address; 
-    // const updatedFirstname = firstname === "" ? data?.detailsConnectUser.updateDetailsUser.firstname : firstname; 
-    // const updatedLastname = lastname === "" ? data?.detailsConnectUser.updateDetailsUser.lastname : lastname; 
     updateUserDetails({
       variables: {
         updateDetailsUserId: data?.detailsConnectUser.id,
