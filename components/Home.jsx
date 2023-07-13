@@ -27,21 +27,21 @@ function Home() {
           let iconName;
 
           if (route.name === "Rentals") {
-            iconName = focused ? "list-circle" : "list-circle-outline";
+            iconName = focused ? "list-circle" : "list-circle-outline", color="#1a265a";
           } else if (route.name === "Contact") {
             iconName = focused
               ? "chatbox-ellipses"
-              : "chatbox-ellipses-outline";
+              : "chatbox-ellipses-outline", color="#1a265a";
           } else if (route.name === "Compte") {
-            iconName = focused ? "person" : "person-outline";
+            iconName = focused ? "person" : "person-outline", color="#1a265a";
           }
           else if (route.name === "ContactForm") {
             iconName = focused ? "person" : "person-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "blue",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#f1600d",
+        tabBarInactiveTintColor: "#1a265a",
       })}
     >
       <Tab.Screen
