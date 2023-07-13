@@ -3,7 +3,6 @@ import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function MessageComponent({ message, userInfos }) {
-  console.log(userInfos.email, message.email);
   return (
     <View
       style={userInfos.email === message.author ? styles.you : styles.other}

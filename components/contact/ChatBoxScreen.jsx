@@ -6,14 +6,46 @@ import useAuth from "../../hooks/useAuth";
 import MessageComponent from "./MessageComponent";
 
 const ChatBox = () => {
+  // const { userInfos } = useAuth();
+  // const [input, onChangeInput] = useState("");
+  // const [messageReceived, setMessageReceived] = useState([]);
+  // console.log(socket.id);
+  // const sendMessage = () => {
+  //   if (input !== "") {
+  //     const messageData = {
+  //       room: userInfos.email,
+  //       author: userInfos.email,
+  //       message: input,
+  //       time:
+  //         new Date(Date.now()).getHours() +
+  //         ":" +
+  //         new Date(Date.now()).getMinutes(),
+  //     };
+  //     // setMessageReceived((prev) => [...prev, messageData]);
+  //     // socket.emit("send_message", messageData);
+  //     console.log(messageData);
+  //     socket.emit("message", messageData);
+  //   }
+  //   onChangeInput("");
+  // };
+  // useEffect(() => {
+  //   const username = userInfos.email;
+  //   socket.auth = { username };
+  //   socket.connect();
+  // }, [userInfos]);
+  // useEffect(() => {
+  //   socket.on("receive_message", (data) => {
+  //     setMessageReceived((prev) => [...prev, data]);
+  //   });
+  // }, []);
+
   const { userInfos } = useAuth();
   const [input, onChangeInput] = useState("");
   const [messageReceived, setMessageReceived] = useState([]);
-  console.log(socket.id);
+
   const sendMessage = () => {
     if (input !== "") {
       const messageData = {
-        room: userInfos.email,
         author: userInfos.email,
         message: input,
         time:
@@ -21,16 +53,21 @@ const ChatBox = () => {
           ":" +
           new Date(Date.now()).getMinutes(),
       };
-      socket.emit("send_message", messageData);
       setMessageReceived((prev) => [...prev, messageData]);
+      socket.emit("send_message", socket.id, messageData);
+      onChangeInput("");
     }
-    onChangeInput("");
   };
+
   useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setMessageReceived((prev) => [...prev, data]);
-    });
-  }, [socket]);
+    socket.emit("create_room", socket.id);
+  });
+
+  // useEffect(() => {
+  //   socket.on("receive_message", (message) => {
+  //     setMessageReceived((prevMessages) => [...prevMessages, message]);
+  //   });
+  // });
 
   return (
     <View style={styles.container}>
