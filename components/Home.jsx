@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 
 import Login from "./Login";
 import Rentals from "./Rentals";
-import Contact from "./Contact";
+import Contact from "./contact/ContactStack";
 import Compte from "./Compte";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
