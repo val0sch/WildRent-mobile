@@ -1,16 +1,23 @@
-import { StyleSheet, View, Text, TextInput, 
-  TouchableOpacity, Pressable, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Pressable,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useMutation, useQuery } from "@apollo/client";
-import { UPDATE_USERDETAILS } from "../graphql/userDetails.mutation";
-import {GET_USERDETAILS} from "../graphql/detailsUserConnect.query"
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useFonts } from 'expo-font';
+import { UPDATE_USERDETAILS } from "../graphql/detailsUser.mutation";
+import { USER_DETAILS } from "../graphql/detailsUser.query";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useFonts } from "expo-font";
 
 const Compte = () => {
   const [fontsLoaded] = useFonts({
-    'Poppins': require("../assets/Poppins-Regular.ttf")
+    Poppins: require("../assets/Poppins-Regular.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -18,27 +25,29 @@ const Compte = () => {
   }
   const { userInfos, logout } = useAuth();
 
-  const [birthday, setBirthday] = useState(data?.detailsConnectUser?.birthday?.substr(0,10));
+  const [birthday, setBirthday] = useState(
+    data?.detailsConnectUser?.birthday?.substr(0, 10)
+  );
   const [showDatePicker, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
   const [address, setAddress] = useState(data?.detailsConnectUser.address);
-  const [firstname, setFirstname] = useState(data?.detailsConnectUser.firstname);
+  const [firstname, setFirstname] = useState(
+    data?.detailsConnectUser.firstname
+  );
   const [lastname, setLastname] = useState(data?.detailsConnectUser.lastname);
 
-  const { data,loading } = useQuery(GET_USERDETAILS, {
+  const { data, loading } = useQuery(USER_DETAILS, {
     onCompleted(data) {
       console.log("Details du user", data);
-      setAddress(data?.detailsConnectUser.address)
-      setFirstname(data?.detailsConnectUser.firstname)
-      setLastname(data?.detailsConnectUser.lastname)
-      setBirthday(data?.detailsConnectUser?.birthday?.substr(0,10))
+      setAddress(data?.detailsConnectUser.address);
+      setFirstname(data?.detailsConnectUser.firstname);
+      setLastname(data?.detailsConnectUser.lastname);
+      setBirthday(data?.detailsConnectUser?.birthday?.substr(0, 10));
     },
     onError(error) {
       console.error(error);
     },
-    fetchPolicy:
-      "no-cache"
-    ,
+    fetchPolicy: "no-cache",
   });
 
   const [updateUserDetails] = useMutation(UPDATE_USERDETAILS, {
@@ -54,17 +63,17 @@ const Compte = () => {
     setShow(!showDatePicker);
   };
 
-  const onChange = ({type}, selectedDate) => {
+  const onChange = ({ type }, selectedDate) => {
     console.log("TYPE", type);
-    if(type === "set"){
+    if (type === "set") {
       const currentDate = selectedDate;
       console.log("currentDate", currentDate);
       setBirthday(currentDate);
-      if( Platform.OS === "android"){
+      if (Platform.OS === "android") {
         toggleDatePicker();
         setBirthday(currentDate.toDateString());
       }
-    }else{
+    } else {
       toggleDatePicker();
     }
   };
@@ -87,44 +96,51 @@ const Compte = () => {
       },
     })
       .then((response) => {
-        console.log("Détails de l'utilisateur mis à jour avec succès :", response.data.updateDetailsUser);
+        console.log(
+          "Détails de l'utilisateur mis à jour avec succès :",
+          response.data.updateDetailsUser
+        );
       })
       .catch((error) => {
-        console.error("Erreur lors de la mise à jour des détails de l'utilisateur :", error);
+        console.error(
+          "Erreur lors de la mise à jour des détails de l'utilisateur :",
+          error
+        );
       });
   };
 
-  if(loading){
-    return <Text>Chargement des données...</Text>
+  if (loading) {
+    return <Text>Chargement des données...</Text>;
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Détails</Text>
-  
-        <Text style={styles.label}>Adresse:</Text>
-        <TextInput
-          style={styles.input}
-          value={address}
-          onChangeText={(text) => setAddress(text)}
-        />
-  
-        <Text style={styles.label}>Prénom:</Text>
-        <TextInput
-          style={styles.input}
-          value={firstname}
-          onChangeText={(text) => setFirstname(text)}
-        />
-  
-        <Text style={styles.label}>Nom:</Text>
-        <TextInput
-          style={styles.input}
-          value={lastname}
-          onChangeText={(text) => setLastname(text)}
-        />
 
-        <Text style={styles.label}>Date de naissance:</Text>
-        {!showDatePicker && (<Pressable onPress={toggleDatePicker}>
+      <Text style={styles.label}>Adresse:</Text>
+      <TextInput
+        style={styles.input}
+        value={address}
+        onChangeText={(text) => setAddress(text)}
+      />
+
+      <Text style={styles.label}>Prénom:</Text>
+      <TextInput
+        style={styles.input}
+        value={firstname}
+        onChangeText={(text) => setFirstname(text)}
+      />
+
+      <Text style={styles.label}>Nom:</Text>
+      <TextInput
+        style={styles.input}
+        value={lastname}
+        onChangeText={(text) => setLastname(text)}
+      />
+
+      <Text style={styles.label}>Date de naissance:</Text>
+      {!showDatePicker && (
+        <Pressable onPress={toggleDatePicker}>
           <TextInput
             style={styles.inputBirthday}
             value={birthday}
@@ -132,35 +148,47 @@ const Compte = () => {
             editable={false}
             onPressIn={toggleDatePicker}
           />
-        </Pressable>)}
-        {showDatePicker && (<DateTimePicker
+        </Pressable>
+      )}
+      {showDatePicker && (
+        <DateTimePicker
           mode="date"
           display="spinner"
           value={date}
           onChange={onChange}
           style={styles.datePicker}
           locale="fr-FR"
-        />)}
+        />
+      )}
 
-        {showDatePicker && Platform.OS === "ios" &&(
-          <View style={{flexDirection: "row",
-            justifyContent: "space-around", alignSelf: "center"}}>
+      {showDatePicker && Platform.OS === "ios" && (
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            alignSelf: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={styles.buttonSecondary}
+            onPress={toggleDatePicker}
+          >
+            <Text style={styles.secondary}>Annuler</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonSecondary} onPress={toggleDatePicker}>
-              <Text style={styles.secondary}>Annuler</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonCalendar}
+            onPress={confirmIOSDate}
+          >
+            <Text style={styles.buttonText}>Valider</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
-            <TouchableOpacity style={styles.buttonCalendar} onPress={confirmIOSDate}>
-              <Text style={styles.buttonText}>Valider</Text>
-            </TouchableOpacity>
-
-          </View>
-        )}
-  
       <TouchableOpacity style={styles.button} onPress={handleUpdateDetails}>
         <Text style={styles.buttonText}>Mettre à jour</Text>
       </TouchableOpacity>
-  
+
       <TouchableOpacity style={styles.buttonLogout} onPress={logout}>
         <Text style={styles.logout}>Déconnexion</Text>
       </TouchableOpacity>
@@ -171,15 +199,15 @@ const Compte = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "whitesmoke", 
+    backgroundColor: "whitesmoke",
     justifyContent: "center",
     alignItems: "left",
     padding: 10,
   },
   title: {
-    fontFamily:'Poppins',
-    alignSelf:'center',
-    textAlign: 'center',
+    fontFamily: "Poppins",
+    alignSelf: "center",
+    textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
@@ -188,28 +216,28 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingLeft: 10,
     paddingBottom: 10,
-    fontFamily:'Poppins',
-    fontSize:"",
+    fontFamily: "Poppins",
+    fontSize: "",
   },
   input: {
     flex: 0.2,
-    backgroundColor: "white", 
+    backgroundColor: "white",
     borderWidth: 1,
     borderColor: "#f1600d",
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 0,
-    width: "100%"
+    width: "100%",
   },
   inputBirthday: {
     flex: 0.2,
-    backgroundColor: "white", 
+    backgroundColor: "white",
     borderWidth: 1,
     borderColor: "#f1600d",
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   buttonCalendar: {
     backgroundColor: "#f1600d",
@@ -219,7 +247,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    alignSelf:'center',
+    alignSelf: "center",
     backgroundColor: "#f1600d",
     borderRadius: 8,
     paddingVertical: 12,
@@ -233,7 +261,7 @@ const styles = StyleSheet.create({
   buttonSecondary: {
     marginRight: 5,
     marginBottom: 10,
-    alignSelf:'center',
+    alignSelf: "center",
     borderRadius: 8,
     borderColor: "#f1600d",
     backgroundColor: "white",
@@ -247,7 +275,7 @@ const styles = StyleSheet.create({
   },
   buttonLogout: {
     marginTop: 10,
-    alignSelf:'center',
+    alignSelf: "center",
     borderRadius: 8,
     borderColor: "#f1600d",
     backgroundColor: "white",
@@ -259,9 +287,9 @@ const styles = StyleSheet.create({
   logout: {
     color: "#f1600d",
   },
-  datePicker:{
+  datePicker: {
     height: 120,
-  }
+  },
 });
 
 export default Compte;
