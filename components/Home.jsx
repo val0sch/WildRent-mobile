@@ -25,13 +25,16 @@ function Home() {
           let iconName;
 
           if (route.name === "Rentals") {
-            iconName = focused ? "list-circle" : "list-circle-outline", color="#1a265a";
+            (iconName = focused ? "list-circle" : "list-circle-outline"),
+              (color = "#1a265a");
           } else if (route.name === "Contact") {
-            iconName = focused
+            (iconName = focused
               ? "chatbox-ellipses"
-              : "chatbox-ellipses-outline", color="#1a265a";
+              : "chatbox-ellipses-outline"),
+              (color = "#1a265a");
           } else if (route.name === "Compte") {
-            iconName = focused ? "person" : "person-outline", color="#1a265a";
+            (iconName = focused ? "person" : "person-outline"),
+              (color = "#1a265a");
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },

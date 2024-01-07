@@ -14,3 +14,5 @@ export const UPDATE_USERDETAILS = gql`
     }
   }
 `;
+
+

@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -7,7 +8,6 @@ import {
   Pressable,
   Platform,
 } from "react-native";
-import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USERDETAILS } from "../graphql/detailsUser.mutation";
@@ -16,39 +16,36 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFonts } from "expo-font";
 
 const Compte = () => {
-  const [fontsLoaded] = useFonts({
-    Poppins: require("../assets/Poppins-Regular.ttf"),
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
   const { userInfos, logout } = useAuth();
+  console.log("userInfos", userInfos);
 
-  const [birthday, setBirthday] = useState(
-    data?.detailsConnectUser?.birthday?.substr(0, 10)
-  );
-  const [showDatePicker, setShow] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [address, setAddress] = useState(data?.detailsConnectUser.address);
-  const [firstname, setFirstname] = useState(
-    data?.detailsConnectUser.firstname
-  );
-  const [lastname, setLastname] = useState(data?.detailsConnectUser.lastname);
-
-  const { data, loading } = useQuery(USER_DETAILS, {
+  const [detailsUser, setDetailsUser] = useState({
+    id: "",
+    firstname: "",
+    lastname: "",
+    address: "",
+    birthday: "",
+  });
+  const { loading } = useQuery(USER_DETAILS, {
     onCompleted(data) {
       console.log("Details du user", data);
-      setAddress(data?.detailsConnectUser.address);
-      setFirstname(data?.detailsConnectUser.firstname);
-      setLastname(data?.detailsConnectUser.lastname);
-      setBirthday(data?.detailsConnectUser?.birthday?.substr(0, 10));
+      setDetailsUser({
+        ...data.getDetailsUserConnected,
+        birthday: data.getDetailsUserConnected?.birthday?.substr(0, 10),
+      });
     },
     onError(error) {
       console.error(error);
     },
     fetchPolicy: "no-cache",
   });
+
+  const [showDatePicker, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+
+  const toggleDatePicker = () => {
+    setShow(!showDatePicker);
+  };
 
   const [updateUserDetails] = useMutation(UPDATE_USERDETAILS, {
     onCompleted(dataUserDetails) {
@@ -59,39 +56,44 @@ const Compte = () => {
     },
   });
 
-  const toggleDatePicker = () => {
-    setShow(!showDatePicker);
-  };
-
-  const onChange = ({ type }, selectedDate) => {
+  const onChangeDate = ({ type }, selectedDate) => {
     console.log("TYPE", type);
     if (type === "set") {
       const currentDate = selectedDate;
       console.log("currentDate", currentDate);
-      setBirthday(currentDate);
+      setDetailsUser({
+        ...detailsUser,
+        birthday: currentDate,
+      });
       if (Platform.OS === "android") {
         toggleDatePicker();
-        setBirthday(currentDate.toDateString());
+        setDetailsUser({
+          ...detailsUser,
+          birthday: currentDate.toDateString(),
+        });
       }
     } else {
       toggleDatePicker();
     }
   };
-
   const confirmIOSDate = () => {
-    setBirthday(new Date(birthday).toDateString());
+    setDetailsUser({
+      ...detailsUser,
+      birthday: new Date(detailsUser.birthday).toDateString(),
+    });
     toggleDatePicker();
   };
 
   const handleUpdateDetails = () => {
+    console.log("detailsUser, handleUpdateDetails", detailsUser);
     updateUserDetails({
       variables: {
-        updateDetailsUserId: data?.detailsConnectUser.id,
+        updateDetailsUserId: detailsUser.id,
         infos: {
-          birthday: birthday,
-          address: address,
-          firstname: firstname,
-          lastname: lastname,
+          birthday: detailsUser.birthday,
+          address: detailsUser.address,
+          firstname: detailsUser.firstname,
+          lastname: detailsUser.lastname,
         },
       },
     })
@@ -108,7 +110,13 @@ const Compte = () => {
         );
       });
   };
+  const [fontsLoaded] = useFonts({
+    Poppins: require("../assets/Poppins-Regular.ttf"),
+  });
 
+  if (!fontsLoaded) {
+    return null;
+  }
   if (loading) {
     return <Text>Chargement des données...</Text>;
   }
@@ -120,22 +128,28 @@ const Compte = () => {
       <Text style={styles.label}>Adresse:</Text>
       <TextInput
         style={styles.input}
-        value={address}
-        onChangeText={(text) => setAddress(text)}
+        value={detailsUser.address}
+        onChangeText={(text) =>
+          setDetailsUser({ ...detailsUser, address: text })
+        }
       />
 
       <Text style={styles.label}>Prénom:</Text>
       <TextInput
         style={styles.input}
-        value={firstname}
-        onChangeText={(text) => setFirstname(text)}
+        value={detailsUser.firstname}
+        onChangeText={(text) =>
+          setDetailsUser({ ...detailsUser, firstname: text })
+        }
       />
 
       <Text style={styles.label}>Nom:</Text>
       <TextInput
         style={styles.input}
-        value={lastname}
-        onChangeText={(text) => setLastname(text)}
+        value={detailsUser.lastname}
+        onChangeText={(text) =>
+          setDetailsUser({ ...detailsUser, lastname: text })
+        }
       />
 
       <Text style={styles.label}>Date de naissance:</Text>
@@ -143,8 +157,10 @@ const Compte = () => {
         <Pressable onPress={toggleDatePicker}>
           <TextInput
             style={styles.inputBirthday}
-            value={birthday}
-            onChangeText={(text) => setBirthday(text)}
+            value={detailsUser.birthday}
+            onChangeText={(text) =>
+              setDetailsUser({ ...detailsUser, birthday: text })
+            }
             editable={false}
             onPressIn={toggleDatePicker}
           />
@@ -155,7 +171,7 @@ const Compte = () => {
           mode="date"
           display="spinner"
           value={date}
-          onChange={onChange}
+          onChange={onChangeDate}
           style={styles.datePicker}
           locale="fr-FR"
         />
