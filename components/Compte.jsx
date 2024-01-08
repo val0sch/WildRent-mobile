@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    fontFamily: "Poppins",
     alignSelf: "center",
     textAlign: "center",
     fontSize: 20,
@@ -225,8 +224,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingLeft: 10,
     paddingBottom: 10,
-    fontFamily: "Poppins",
-    fontSize: "",
   },
   input: {
     flex: 0.2,

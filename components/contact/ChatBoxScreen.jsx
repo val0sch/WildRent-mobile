@@ -1,9 +1,15 @@
 import { View, TextInput, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import socket from "../../service/socketService";
 import useAuth from "../../hooks/useAuth";
 import MessageComponent from "./MessageComponent";
+
+const socket = io("http://192.168.1.17:3001", {
+  // transports: ["websocket"],
+  autoConnect: false,
+  // reconnection: true,
+});
 
 const ChatBox = () => {
   const { userInfos } = useAuth();
@@ -12,6 +18,7 @@ const ChatBox = () => {
   const [listUsers, setListUsers] = useState([]);
   const userEmail = userInfos.email;
   const [adminSocket, setAdminSocket] = useState(null);
+
   const sendMessage = () => {
     if (input !== "") {
       const messageData = {
@@ -24,52 +31,45 @@ const ChatBox = () => {
           new Date(Date.now()).getMinutes(),
       };
       setMessageReceived((prev) => [...prev, messageData]);
-      if (listUsers.length > 0) {
-        const findAdminSocket = listUsers.find(
-          (user) => user.userEmail === "admin@admin.fr"
-        );
-        if (findAdminSocket) {
-          setAdminSocket(findAdminSocket.userID);
-          console.log("yo", adminSocket);
-        }
-        socket.emit("privateMessage", {
-          messageData,
-          to: adminSocket,
-        });
-      }
+
+      socket.emit("privateMessage", {
+        messageData,
+        to: adminSocket,
+      });
     }
     onChangeInput("");
   };
+
+  console.log(adminSocket, "adminSocket");
 
   useEffect(() => {
     socket.auth = { userEmail };
     socket.connect();
 
-    socket.on("users", (users) => {
-      setListUsers(users);
-    });
-    socket.on("privateMessage", ({ messageData, from }) => {
-      console.log(messageData, from);
-      if (from === adminSocket) {
-        console.log("KPZKOPDJZAKAEKC");
-        setMessageReceived((prev) => [...prev, messageData]);
-        console.log("messageReceived", messageReceived);
-      }
-    });
     socket.on("connect_error", (err) => {
       if (err.message === "invalid username") {
         console.log("big error ", err.message);
       }
     });
 
-    return () => {
-      socket.off("connect_error");
-      socket.off("privateMessage");
-    };
+    socket.on("users", (users) => {
+      users.find((user) => {
+        user.userEmail === "admin@admin.fr" && setAdminSocket(user.userID);
+      });
+    });
+
+    socket.on("privateMessage", ({ messageData, from }) => {
+      console.log("private message comming", messageData, from);
+      console.log(adminSocket);
+      if (from === adminSocket) {
+        console.log("KPZKOPDJZAKAEKC");
+        setMessageReceived((prev) => [...prev, messageData]);
+        console.log("messageReceived", messageReceived);
+      }
+    });
   }, [messageReceived, userEmail]);
 
   // ****************$//////////////////////
-  console.log(listUsers);
   // const { userInfos } = useAuth();
   // const [input, onChangeInput] = useState("");
   // const [messageReceived, setMessageReceived] = useState([]);
@@ -99,6 +99,7 @@ const ChatBox = () => {
   //     setMessageReceived((prevMessages) => [...prevMessages, message]);
   //   });
   // });
+  console.log(messageReceived);
 
   return (
     <View style={styles.container}>
