@@ -16,8 +16,10 @@ function Login() {
     },
   });
   const [state, setState] = useState({
-    email: "testuser@test.fr",
-    password: "Test2023",
+    email: "",
+    password: "",
+    // email: "testuser@test.fr",
+    // password: "Test2023",
   });
   const handleSubmit = (e) => {
     e.preventDefault();
