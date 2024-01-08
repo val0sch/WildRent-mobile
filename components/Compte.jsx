@@ -110,13 +110,7 @@ const Compte = () => {
         );
       });
   };
-  const [fontsLoaded] = useFonts({
-    Poppins: require("../assets/Poppins-Regular.ttf"),
-  });
 
-  if (!fontsLoaded) {
-    return null;
-  }
   if (loading) {
     return <Text>Chargement des données...</Text>;
   }
