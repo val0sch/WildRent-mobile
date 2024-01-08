@@ -13,7 +13,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USERDETAILS } from "../graphql/detailsUser.mutation";
 import { USER_DETAILS } from "../graphql/detailsUser.query";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useFonts } from "expo-font";
 
 const Compte = () => {
   const { userInfos, logout } = useAuth();
