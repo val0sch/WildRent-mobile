@@ -8,7 +8,6 @@ function Login() {
 
   const [login, { error, loading }] = useLoginLazyQuery({
     async onCompleted(data) {
-      console.log("data", data);
       await setUserData(data.login);
     },
     onError(err) {
@@ -18,6 +17,8 @@ function Login() {
   const [state, setState] = useState({
     email: "",
     password: "",
+    // email: "testuser@test.fr",
+    // password: "Test2023",
   });
   const handleSubmit = (e) => {
     e.preventDefault();

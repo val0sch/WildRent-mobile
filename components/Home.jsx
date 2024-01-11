@@ -6,10 +6,8 @@ import useAuth from "../hooks/useAuth";
 
 import Login from "./Login";
 import Rentals from "./Rentals";
-import Contact from "./Contact";
+import Contact from "./contact/ContactStack";
 import Compte from "./Compte";
-
-import ContactForm from "./ContactForm";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -27,16 +25,16 @@ function Home() {
           let iconName;
 
           if (route.name === "Rentals") {
-            iconName = focused ? "list-circle" : "list-circle-outline", color="#1a265a";
+            (iconName = focused ? "list-circle" : "list-circle-outline"),
+              (color = "#1a265a");
           } else if (route.name === "Contact") {
-            iconName = focused
+            (iconName = focused
               ? "chatbox-ellipses"
-              : "chatbox-ellipses-outline", color="#1a265a";
+              : "chatbox-ellipses-outline"),
+              (color = "#1a265a");
           } else if (route.name === "Compte") {
-            iconName = focused ? "person" : "person-outline", color="#1a265a";
-          }
-          else if (route.name === "ContactForm") {
-            iconName = focused ? "person" : "person-outline";
+            (iconName = focused ? "person" : "person-outline"),
+              (color = "#1a265a");
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -58,11 +56,6 @@ function Home() {
         name="Contact"
         component={Contact}
         options={{ title: "Prendre contact" }}
-      />
-      <Tab.Screen
-        name="ContactForm"
-        component={ContactForm}
-        options={{ title: "ContactForm" }}
       />
     </Tab.Navigator>
   ) : (
