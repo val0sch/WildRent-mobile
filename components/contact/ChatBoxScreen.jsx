@@ -1,43 +1,72 @@
 import { View, TextInput, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import socket from "../../service/socketService";
-import useAuth from "../../hooks/useAuth";
 import MessageComponent from "./MessageComponent";
+import useAuth from "../../hooks/useAuth";
+import { socket } from "../../socketService";
+
 
 const ChatBox = () => {
   const { userInfos } = useAuth();
+  const userEmail = userInfos.email;
   const [input, onChangeInput] = useState("");
-  const [messageReceived, setMessageReceived] = useState([]);
-  console.log(socket.id);
+  const [listUsers, setListUsers] = useState([]);
+  const [userMessages, setUserMessages] = useState([]);
+
   const sendMessage = () => {
+    let adminId;
+
+    const findAdminId = listUsers.find(
+      (user) => user.userEmail === "admin@admin.fr"
+    );
+    if (findAdminId) {
+      adminId = findAdminId.userID;
+    }
+
     if (input !== "") {
       const messageData = {
-        room: userInfos.email,
-        author: userInfos.email,
+        room: userEmail,
+        author: userEmail,
         message: input,
         time:
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes(),
       };
-      socket.emit("send_message", messageData);
-      setMessageReceived((prev) => [...prev, messageData]);
+      setUserMessages((prev) => [...prev, messageData]);
+
+      socket.emit("privateMessage", {
+        messageData,
+        to: adminId,
+      });
     }
     onChangeInput("");
   };
+
   useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setMessageReceived((prev) => [...prev, data]);
+    socket.auth = { userEmail };
+    socket.connect();
+
+    socket.on("users", (users) => {
+      setListUsers(users);
     });
-  }, [socket]);
+
+    socket.on("privateMessage", ({ messageData, from }) => {
+      setUserMessages((prev) => [...prev, messageData]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
 
   return (
     <View style={styles.container}>
       <View style={styles.messageBox}>
-        {messageReceived && (
+        {userMessages && (
           <FlatList
-            data={messageReceived}
+            data={userMessages}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <MessageComponent message={item} userInfos={userInfos} />
@@ -53,7 +82,7 @@ const ChatBox = () => {
           value={input}
           placeholder="Votre message..."
         />
-        <Pressable style={styles.button} onPress={sendMessage}>
+        <Pressable style={styles.button} onPress={() => sendMessage()}>
           <Ionicons name={"send-outline"} size={25} color="white" />
         </Pressable>
       </View>
@@ -69,10 +98,7 @@ const styles = StyleSheet.create({
   },
   messageBox: {
     flex: 1,
-    // backgroundColor: "red",
     padding: 10,
-    //not working
-    // justifyContent: "center",
   },
   writingBox: {
     backgroundColor: "#fff",

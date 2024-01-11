@@ -32,10 +32,6 @@ const styles = StyleSheet.create({
     width: 300,
     //turquoise
     backgroundColor: "#50a5b1",
-    // blue navy
-    // backgroundColor: "#1a265a",
-    // orange
-    // backgroundColor: "#f1600d",
     borderRadius: 10,
     paddingVertical: 20,
     alignContent: "center",

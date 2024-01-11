@@ -8,7 +8,6 @@ function Login() {
 
   const [login, { error, loading }] = useLoginLazyQuery({
     async onCompleted(data) {
-      // console.log("data", data);
       await setUserData(data.login);
     },
     onError(err) {
@@ -40,7 +39,7 @@ function Login() {
         style={styles.input}
         placeholder="renseignez votre email"
         onChange={(event) =>
-          setState({ ...state, email: event.nativeEvent.text.toLowerCase() })
+          setState({ ...state, email: event.nativeEvent.text })
         }
         value={state.email}
       ></TextInput>

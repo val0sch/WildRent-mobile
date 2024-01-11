@@ -16,7 +16,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 const Compte = () => {
   const { userInfos, logout } = useAuth();
-  console.log("userInfos", userInfos);
 
   const [detailsUser, setDetailsUser] = useState({
     id: "",
@@ -27,7 +26,6 @@ const Compte = () => {
   });
   const { loading } = useQuery(USER_DETAILS, {
     onCompleted(data) {
-      console.log("Details du user", data);
       setDetailsUser({
         ...data.getDetailsUserConnected,
         birthday: data.getDetailsUserConnected?.birthday?.substr(0, 10),
@@ -47,19 +45,15 @@ const Compte = () => {
   };
 
   const [updateUserDetails] = useMutation(UPDATE_USERDETAILS, {
-    onCompleted(dataUserDetails) {
-      console.log("Details du user", dataUserDetails);
-    },
     onError(error) {
       console.error(error);
     },
   });
 
   const onChangeDate = ({ type }, selectedDate) => {
-    console.log("TYPE", type);
+    // console.log("TYPE", type);
     if (type === "set") {
       const currentDate = selectedDate;
-      console.log("currentDate", currentDate);
       setDetailsUser({
         ...detailsUser,
         birthday: currentDate,
@@ -84,7 +78,6 @@ const Compte = () => {
   };
 
   const handleUpdateDetails = () => {
-    console.log("detailsUser, handleUpdateDetails", detailsUser);
     updateUserDetails({
       variables: {
         updateDetailsUserId: detailsUser.id,
@@ -214,7 +207,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    fontFamily: "Poppins",
     alignSelf: "center",
     textAlign: "center",
     fontSize: 20,
@@ -225,8 +217,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingLeft: 10,
     paddingBottom: 10,
-    fontFamily: "Poppins",
-    fontSize: "",
   },
   input: {
     flex: 0.2,
